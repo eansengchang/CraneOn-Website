@@ -1,7 +1,8 @@
 const express = require('express');
 
 const {
-  getEquipments,
+  getAllEquipments,
+  getUserEquipments,
   getEquipment,
   createEquipment,
   deleteEquipment,
@@ -12,10 +13,13 @@ const requireAuth = require('../middleware/requireAuth');
 const router = express.Router();
 
 //need authentication for all the requests
-router.use(requireAuth)
+router.use(requireAuth);
 
 //GET all equipments
-router.get('/', getEquipments);
+router.get('/all', getAllEquipments);
+
+//GET all equipments of a user
+router.get('/', getUserEquipments);
 
 //GET a equipment
 router.get('/:id', getEquipment);

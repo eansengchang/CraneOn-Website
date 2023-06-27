@@ -1,8 +1,15 @@
 const equipmentModel = require('../models/equipmentModel');
 const mongoose = require('mongoose');
 
-// get equipments
-const getEquipments = async (req, res) => {
+// get al equipments
+const getAllEquipments = async (req, res) => {
+  const equipments = await equipmentModel.find({});
+
+  res.status(200).json(equipments);
+};
+
+// get equipments of a user
+const getUserEquipments = async (req, res) => {
   const user_id = req.user._id;
   const equipments = await equipmentModel.find({ user_id });
 
@@ -47,12 +54,17 @@ const deleteEquipment = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).json({ error: 'No such equipment' });
 
-  const equipment = await equipmentModel.findOneAndDelete({ _id: id });
+  const equipment = await equipmentModel.findById(id);
+  if (equipment.user_id != req.user._id) {
+    res.status(401).json({ error: 'Request not authorized' });
+  }
+
+  const deletedEquipment = await equipmentModel.findOneAndDelete({ _id: id });
 
   if (!equipment) {
     return res.status(404).json({ error: 'No such equipment' });
   }
-  res.status(200).json(equipment);
+  res.status(200).json(deletedEquipment);
 };
 
 // update a equipment
@@ -62,7 +74,12 @@ const updateEquipment = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).json({ error: 'No such equipment' });
 
-  const equipment = await equipmentModel.findOneAndUpdate(
+  const equipment = await equipmentModel.findById(id);
+  if (equipment.user_id != req.user._id) {
+    res.status(401).json({ error: 'Request not authorized' });
+  }
+
+  const updatedEquipment = await equipmentModel.findOneAndUpdate(
     { _id: id },
     {
       ...req.body,
@@ -72,11 +89,12 @@ const updateEquipment = async (req, res) => {
   if (!equipment) {
     return res.status(404).json({ error: 'No such equipment' });
   }
-  res.status(200).json(equipment);
+  res.status(200).json(updatedEquipment);
 };
 
 module.exports = {
-  getEquipments,
+  getAllEquipments,
+  getUserEquipments,
   getEquipment,
   createEquipment,
   deleteEquipment,
