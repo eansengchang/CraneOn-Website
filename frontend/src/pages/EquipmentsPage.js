@@ -14,11 +14,13 @@ const EquipmentsPage = () => {
   const user = authState.user;
 
   useEffect(() => {
+    //reset all equipments
+    dispatch({ type: 'SET_EQUIPMENTS', payload: null });
     //fetch all equipments
     const fetchEquipments = async () => {
       const response = await fetch('/api/equipments', {
         headers: {
-          'Authorization': `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       });
       const json = await response.json();
@@ -37,7 +39,7 @@ const EquipmentsPage = () => {
     <div className="equipmentspage">
       <div>
         {equipments &&
-          equipments.map((equipment) => (
+          equipments?.map((equipment) => (
             <EquipmentDetails key={equipment._id} equipment={equipment}>
               {equipment.description}
             </EquipmentDetails>

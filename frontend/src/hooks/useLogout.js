@@ -12,6 +12,7 @@ export const useLogout = () => {
     //dispatch logout action
     dispatch({ type: 'LOGOUT' });
     equipmentDispatch({ type: 'SET_EQUIPMENTS', payload: null });
+    equipmentDispatch({ type: 'SET_BOOKINGS', payload: null });
   };
 
   return { logout };

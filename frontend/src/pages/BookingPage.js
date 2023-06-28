@@ -1,28 +1,45 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet';
-import { Icon } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-
-import { useEquipmentsContext } from '../hooks/useEquipmentsContext';
+import { useEffect, useMemo, useState } from 'react';
+import { useBookingContext } from '../hooks/useBookingsContext';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useEquipmentsContext } from '../hooks/useEquipmentsContext';
+
+//calendar
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import format from 'date-fns/format';
+import parse from 'date-fns/parse';
+import startOfWeek from 'date-fns/startOfWeek';
+import getDay from 'date-fns/getDay';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+import BookingForm from '../components/BookingForm';
+
+const locales = {
+  'en-GB': require('date-fns/locale/en-GB'),
+};
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales,
+});
 
 const BookingPage = () => {
-  const customIcon = new Icon({
-    // iconUrl: 'https://cdn-icons-png.flaticon.com/512/2776/2776067.png',
-    iconUrl: require('../img/marker-icon.png'),
-    iconSize: [38, 38],
-  });
-
-  const { state, dispatch } = useEquipmentsContext();
-  const { state: authState } = useAuthContext();
-
-  const equipments = state.equipments;
+  const { state: bookingState, dispatch: dispatchBookings } =
+    useBookingContext();
+  const { state: authState, dispatch: dispatchUser } = useAuthContext();
+  const { state: equipmentsState, dispatch: dispatchEquipments } =
+    useEquipmentsContext();
   const user = authState.user;
 
   useEffect(() => {
-    //fetch all equipments
-    const fetchEquipments = async () => {
-      const response = await fetch('/api/equipments/all', {
+    //reset equipments and bookings
+    dispatchEquipments({ type: 'SET_EQUIPMENTS', payload: null });
+    dispatchBookings({ type: 'SET_BOOKINGS', payload: null });
+
+    //fetch all bookings
+    const fetchBookings = async () => {
+      const response = await fetch('/api/bookings', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -30,49 +47,57 @@ const BookingPage = () => {
       let json = await response.json();
 
       if (response.ok) {
-        dispatch({ type: 'SET_EQUIPMENTS', payload: json });
+        dispatchBookings({ type: 'SET_BOOKINGS', payload: json });
+      }
+    };
+
+    //fetch all equipments
+    const fetchEquipments = async () => {
+      const response = await fetch('/api/equipments/all', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
+      if (response.ok) {
+        dispatchEquipments({ type: 'SET_EQUIPMENTS', payload: json });
       }
     };
 
     if (user) {
       fetchEquipments();
+      fetchBookings();
     }
-  }, [dispatch, user]);
+  }, [dispatchBookings, user, dispatchEquipments]);
+
+  const { views, ...otherProps } = useMemo(
+    () => ({
+      views: {
+        month: true,
+      },
+    }),
+    []
+  );
 
   return (
     <>
-      <MapContainer center={[51.76227, -1.26221]} zoom={8} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+      <div>
+        <Calendar
+          localizer={localizer}
+          events={bookingState.bookings?.map((booking) => {
+            return {
+              title: booking.name,
+              start: new Date(booking.startDate),
+              end: new Date(booking.endDate),
+            };
+          })}
+          startAccessor="start"
+          endAccessor="end"
+          style={{ height: 500, margin: '50px' }}
+          // views={views}
         />
-        {equipments?.map((marker) => {
-          console.log(marker.geocode);
-          return (
-            <Marker
-              key={marker._id}
-              position={marker.geocode}
-              icon={customIcon}
-            >
-              <Popup>
-                <h4>{marker.name}</h4>
-                <p>
-                  <strong>Description: </strong>
-                  {marker.description}
-                </p>
-                <p>
-                  <strong>Price: </strong>
-                  {marker.price}
-                </p>
-                <p>
-                  <strong>Postcode: </strong>
-                  {marker.postcode}
-                </p>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
+      </div>
+      <BookingForm></BookingForm>
     </>
   );
 };

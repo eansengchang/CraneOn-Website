@@ -46,7 +46,7 @@ const createEquipment = async (req, res) => {
     const equipment = await equipmentModel.create({
       ...req.body,
       user_id,
-      geocode: [latitude, longitude]
+      geocode: [latitude, longitude],
     });
     res.status(200).json(equipment);
   } catch (error) {
@@ -83,6 +83,9 @@ const updateEquipment = async (req, res) => {
     return res.status(404).json({ error: 'No such equipment' });
 
   const equipment = await equipmentModel.findById(id);
+  if (!equipment) {
+    return res.status(404).json({ error: 'No such equipment' });
+  }
   if (equipment.user_id != req.user._id) {
     res.status(401).json({ error: 'Request not authorized' });
   }
@@ -94,9 +97,6 @@ const updateEquipment = async (req, res) => {
     }
   );
 
-  if (!equipment) {
-    return res.status(404).json({ error: 'No such equipment' });
-  }
   res.status(200).json(updatedEquipment);
 };
 
