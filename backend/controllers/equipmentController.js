@@ -1,7 +1,9 @@
 const equipmentModel = require('../models/equipmentModel');
 const mongoose = require('mongoose');
 
-// get al equipments
+const postcodes = require('node-postcodes.io');
+
+// get all equipments
 const getAllEquipments = async (req, res) => {
   const equipments = await equipmentModel.find({});
 
@@ -36,9 +38,15 @@ const getEquipment = async (req, res) => {
 const createEquipment = async (req, res) => {
   try {
     const user_id = req.user._id;
+
+    //get coordinates
+    const postcodeInfo = await postcodes.lookup(req.body.postcode);
+    const { latitude, longitude } = postcodeInfo.result;
+
     const equipment = await equipmentModel.create({
       ...req.body,
       user_id,
+      geocode: [latitude, longitude]
     });
     res.status(200).json(equipment);
   } catch (error) {

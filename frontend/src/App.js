@@ -4,6 +4,7 @@ import { useAuthContext } from './hooks/useAuthContext';
 //pages
 import HomePage from './pages/Home';
 import EquipmentsPage from './pages/EquipmentsPage';
+import BookingPage from './pages/BookingPage';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -22,6 +23,9 @@ function App() {
             <Route
               path="/equipments"
               element={user ? <EquipmentsPage /> : <Navigate to="/login" />}
+            /><Route
+              path="/booking"
+              element={user ? <BookingPage /> : <Navigate to="/login" />}
             />
             <Route
               path="/login"

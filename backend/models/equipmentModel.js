@@ -21,6 +21,10 @@ const equipmentSchema = new Schema(
       type: String,
       required: true,
     },
+    geocode: {
+      type: [Number],
+      required: true,
+    },
     price: {
       type: Number,
       required: true,

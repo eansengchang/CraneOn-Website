@@ -20,7 +20,7 @@ const Navbar = () => {
         <nav>
           <div>
             <Link to="/equipments">Advertise Equipments</Link>
-            <Link to="/bookings">Book Equipments</Link>
+            <Link to="/booking">Book Equipments</Link>
           </div>
           <div>
             {user && (
