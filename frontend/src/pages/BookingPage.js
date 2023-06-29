@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBookingContext } from '../hooks/useBookingsContext';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useEquipmentsContext } from '../hooks/useEquipmentsContext';
@@ -27,10 +27,32 @@ const localizer = dateFnsLocalizer({
 const BookingPage = () => {
   const { state: bookingState, dispatch: dispatchBookings } =
     useBookingContext();
-  const { state: authState, dispatch: dispatchUser } = useAuthContext();
-  const { state: equipmentsState, dispatch: dispatchEquipments } =
-    useEquipmentsContext();
+  const { state: authState } = useAuthContext();
+  const { dispatch: dispatchEquipments } = useEquipmentsContext();
   const user = authState.user;
+
+  //keep track of selected booking to delete
+  const [currentBooking, setCurrentBooking] = useState(null);
+
+  const handleEventSelection = (e) => {
+    setCurrentBooking({ _id: e.booking_id });
+  };
+
+  const handleClick = async () => {
+    if (!user) {
+      return;
+    }
+    const response = await fetch('/api/bookings/' + currentBooking._id, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    const json = await response.json();
+    if (response.ok) {
+      dispatchBookings({ type: 'DELETE_BOOKING', payload: json });
+    }
+  };
 
   useEffect(() => {
     //reset equipments and bookings
@@ -70,18 +92,10 @@ const BookingPage = () => {
     }
   }, [dispatchBookings, user, dispatchEquipments]);
 
-  const { views, ...otherProps } = useMemo(
-    () => ({
-      views: {
-        month: true,
-      },
-    }),
-    []
-  );
-
   return (
     <>
       <div>
+        <h2>Your Current Bookings</h2>
         <Calendar
           localizer={localizer}
           events={bookingState.bookings?.map((booking) => {
@@ -89,14 +103,18 @@ const BookingPage = () => {
               title: booking.name,
               start: new Date(booking.startDate),
               end: new Date(booking.endDate),
+              booking_id: booking._id,
             };
           })}
           startAccessor="start"
           endAccessor="end"
           style={{ height: 500, margin: '50px' }}
-          // views={views}
+          onSelectEvent={handleEventSelection}
         />
       </div>
+      <span className="delete-button" onClick={handleClick}>
+        Delete Booking
+      </span>
       <BookingForm></BookingForm>
     </>
   );

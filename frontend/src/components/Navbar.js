@@ -19,8 +19,12 @@ const Navbar = () => {
         </Link>
         <nav>
           <div>
-            <Link to="/equipments">Advertise Equipments</Link>
-            <Link to="/booking">Book Equipments</Link>
+            {user && (
+              <>
+                <Link to="/equipments">Advertise Equipments</Link>
+                <Link to="/booking">Book Equipments</Link>
+              </>
+            )}
           </div>
           <div>
             {user && (

@@ -1,8 +1,14 @@
+import '../css/homePage.css';
+
+import { HeroSection } from '../components/Home Page/HeroSection';
+import { InfoSection } from '../components/Home Page/InfoSection';
 
 const Home = () => {
-
   return (
-    <h1>Welcome to Craneon </h1>
+    <>
+      <HeroSection></HeroSection>
+      <InfoSection></InfoSection>
+    </>
   );
 };
 

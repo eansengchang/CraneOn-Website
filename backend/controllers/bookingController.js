@@ -29,6 +29,23 @@ const getBooking = async (req, res) => {
 const createBooking = async (req, res) => {
   try {
     const user_id = req.user._id;
+    const {  equipment_id } = req.body;
+    const startDate = new Date(req.body.startDate)
+    const endDate = new Date(req.body.endDate)
+
+    const equipmentBookings = await bookingModel.find({ equipment_id });
+
+    //check if overlapping bookings
+    const overlap = equipmentBookings.some((b) => {
+      return (
+        (startDate < b.startDate && b.startDate < endDate) ||
+        (startDate < b.endDate && b.endDate < endDate)
+      );
+    });
+
+    if (overlap) {
+      return res.status(400).json({error:"Can't overlap bookings"});
+    }
 
     const booking = await bookingModel.create({
       ...req.body,
