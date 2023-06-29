@@ -55,7 +55,7 @@ export const InfoSection = () => {
           <CardContainer>
             <ImageWrapper>
               <ImageCircle>
-                <Image src={img3} />
+                <Image src={img3}  />
               </ImageCircle>
             </ImageWrapper>
 

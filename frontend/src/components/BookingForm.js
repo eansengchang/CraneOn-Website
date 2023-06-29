@@ -33,7 +33,6 @@ const BookingForm = () => {
   });
 
   const customIcon = new Icon({
-    // iconUrl: 'https://cdn-icons-png.flaticon.com/512/2776/2776067.png',
     iconUrl: require('../img/marker-icon.png'),
     iconSize: [38, 38],
   });
