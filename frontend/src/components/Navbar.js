@@ -22,7 +22,7 @@ const Navbar = () => {
             {user && (
               <>
                 <Link to="/equipments">Advertise Equipments</Link>
-                <Link to="/booking">Book Equipments</Link>
+                <Link to="/bookings">Book Equipments</Link>
               </>
             )}
           </div>

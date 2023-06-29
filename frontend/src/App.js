@@ -8,6 +8,7 @@ import BookingPage from './pages/BookingPage';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Footer from './components/Footer';
 
 function App() {
   const { state } = useAuthContext();
@@ -23,8 +24,9 @@ function App() {
             <Route
               path="/equipments"
               element={user ? <EquipmentsPage /> : <Navigate to="/login" />}
-            /><Route
-              path="/booking"
+            />
+            <Route
+              path="/bookings"
               element={user ? <BookingPage /> : <Navigate to="/login" />}
             />
             <Route
@@ -37,6 +39,7 @@ function App() {
             />
           </Routes>
         </div>
+        <Footer />
       </BrowserRouter>
     </div>
   );

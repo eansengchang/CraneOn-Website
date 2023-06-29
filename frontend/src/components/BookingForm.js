@@ -78,82 +78,87 @@ const BookingForm = () => {
   return (
     <>
       <h2>Book More Equipment</h2>
-      <div className="map-container">
-        <div>
-          <MapContainer center={[51.76227, -1.26221]} zoom={8}>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MarkerClusterGroup
-              chunkedLoading
-              iconCreateFunction={createCustomClusterIcon}
-              showCoverageOnHover={false}
-            >
-              {equipments?.map((marker) => (
-                <Marker
-                  key={marker._id}
-                  position={marker.geocode}
-                  icon={customIcon}
-                >
-                  <Popup>
-                    <h4>{marker.name}</h4>
-                    <p>
-                      <strong>Description: </strong>
-                      {marker.description}
-                    </p>
-                    <p>
-                      <strong>Price: </strong>
-                      {marker.price}
-                    </p>
-                    <p>
-                      <strong>Postcode: </strong>
-                      {marker.postcode}
-                    </p>
-                    <button
-                      onClick={() =>
-                        setNewBooking({
-                          ...newBooking,
-                          name: marker.name,
-                          equipment_id: marker._id,
-                        })
-                      }
-                    >
-                      Book
-                    </button>
-                  </Popup>
-                </Marker>
-              ))}
-            </MarkerClusterGroup>{' '}
-          </MapContainer>
-        </div>
-        <form className="booking-container" onSubmit={handleAddBooking}>
-          <h3>Book Equipment</h3>
-          {newBooking.name ? (
-            <>
-              <h4>Add New Booking for {newBooking.name}</h4>
+      <div className="booking-form-container">
+        <div className="map-container">
+          <div>
+            <MapContainer center={[51.76227, -1.26221]} zoom={8}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <MarkerClusterGroup
+                chunkedLoading
+                iconCreateFunction={createCustomClusterIcon}
+                showCoverageOnHover={false}
+              >
+                {equipments?.map((marker) => (
+                  <Marker
+                    key={marker._id}
+                    position={marker.geocode}
+                    icon={customIcon}
+                  >
+                    <Popup>
+                      <h4>{marker.name}</h4>
+                      <p>
+                        <strong>Description: </strong>
+                        {marker.description}
+                      </p>
+                      <p>
+                        <strong>Price: </strong>
+                        {marker.price}
+                      </p>
+                      <p>
+                        <strong>Postcode: </strong>
+                        {marker.postcode}
+                      </p>
+                      <button
+                        onClick={() =>
+                          setNewBooking({
+                            ...newBooking,
+                            name: marker.name,
+                            equipment_id: marker._id,
+                          })
+                        }
+                      >
+                        Book
+                      </button>
+                    </Popup>
+                  </Marker>
+                ))}
+              </MarkerClusterGroup>{' '}
+            </MapContainer>
+          </div>
+          <form
+            className="booking-info-container"
+            onSubmit={handleAddBooking}
+          >
+            <h3>Book Equipment</h3>
+            {newBooking.name ? (
+              <>
+                <h4>Add New Booking for {newBooking.name}</h4>
 
-              <DatePicker
-                placeholderText="Start Date"
-                selected={newBooking.startDate}
-                onChange={(startDate) =>
-                  setNewBooking({ ...newBooking, startDate })
-                }
-              />
-              <DatePicker
-                placeholderText="End Date"
-                selected={newBooking.endDate}
-                onChange={(endDate) =>
-                  setNewBooking({ ...newBooking, endDate })
-                }
-              />
-              <button>Add Booking</button>
-            </>
-          ) : (
-            <h4>Please select an equipment to book it on the calendar.</h4>
-          )}
-          {error && <div className="error">{error}</div>}
-        </form>
+                <DatePicker
+                  placeholderText="Start Date"
+                  selected={newBooking.startDate}
+                  onChange={(startDate) =>
+                    setNewBooking({ ...newBooking, startDate })
+                  }
+                />
+                <DatePicker
+                  placeholderText="End Date"
+                  selected={newBooking.endDate}
+                  onChange={(endDate) =>
+                    setNewBooking({ ...newBooking, endDate })
+                  }
+                />
+                <button>Add Booking</button>
+              </>
+            ) : (
+              <h4>Please select an equipment to book it on the calendar.</h4>
+            )}
+            {error && <div className="error">{error}</div>}
+          </form>
+        </div>
       </div>
     </>
   );

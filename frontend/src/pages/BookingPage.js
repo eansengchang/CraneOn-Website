@@ -28,14 +28,18 @@ const BookingPage = () => {
   const { state: bookingState, dispatch: dispatchBookings } =
     useBookingContext();
   const { state: authState } = useAuthContext();
-  const { dispatch: dispatchEquipments } = useEquipmentsContext();
+  const { state: equipmentsState, dispatch: dispatchEquipments } =
+    useEquipmentsContext();
   const user = authState.user;
 
   //keep track of selected booking to delete
   const [currentBooking, setCurrentBooking] = useState(null);
 
-  const handleEventSelection = (e) => {
-    setCurrentBooking({ _id: e.booking_id });
+  const handleEventSelection = (clickedBooking) => {
+    clickedBooking.equipment = equipmentsState.equipments.find(
+      (e) => e._id === clickedBooking.equipment_id
+    );
+    setCurrentBooking(clickedBooking);
   };
 
   const handleClick = async () => {
@@ -51,6 +55,7 @@ const BookingPage = () => {
     const json = await response.json();
     if (response.ok) {
       dispatchBookings({ type: 'DELETE_BOOKING', payload: json });
+      setCurrentBooking(null);
     }
   };
 
@@ -94,27 +99,54 @@ const BookingPage = () => {
 
   return (
     <>
-      <div>
-        <h2>Your Current Bookings</h2>
-        <Calendar
-          localizer={localizer}
-          events={bookingState.bookings?.map((booking) => {
-            return {
-              title: booking.name,
-              start: new Date(booking.startDate),
-              end: new Date(booking.endDate),
-              booking_id: booking._id,
-            };
-          })}
-          startAccessor="start"
-          endAccessor="end"
-          style={{ height: 500, margin: '50px' }}
-          onSelectEvent={handleEventSelection}
-        />
+      <h2>Your Current Bookings</h2>
+      <div className="bookings-container">
+        <div className="calendar-container">
+          <Calendar
+            localizer={localizer}
+            events={bookingState.bookings?.map((booking) => {
+              return {
+                title: booking.name,
+                start: new Date(booking.startDate),
+                end: new Date(booking.endDate),
+                ...booking,
+              };
+            })}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500, margin: '50px' }}
+            onSelectEvent={handleEventSelection}
+          />
+        </div>
+        <div className="booking-info-container">
+          {currentBooking ? (
+            <>
+              <h2 style={{ 'text-align': 'center' }}>
+                {"Booking for " + currentBooking.equipment.name + ":"}
+              </h2>
+              <p>
+                <strong>Description: </strong>
+                {currentBooking.equipment.description}
+              </p>
+              <p>
+                <strong>Price: </strong>
+                {currentBooking.equipment.price}
+              </p>
+              <p>
+                <strong>Postcode: </strong>
+                {currentBooking.equipment.postcode}
+              </p>
+              <span className="delete-button" onClick={handleClick}>
+                Delete Booking
+              </span>
+            </>
+          ) : (
+            <h2 style={{ 'text-align': 'center' }}>
+              Please select a booking to view it
+            </h2>
+          )}
+        </div>
       </div>
-      <span className="delete-button" onClick={handleClick}>
-        Delete Booking
-      </span>
       <BookingForm></BookingForm>
     </>
   );

@@ -38,12 +38,20 @@ const EquipmentsPage = () => {
   return (
     <div className="equipmentspage">
       <div>
-        {equipments &&
-          equipments?.map((equipment) => (
-            <EquipmentDetails key={equipment._id} equipment={equipment}>
-              {equipment.description}
-            </EquipmentDetails>
-          ))}
+        {equipments ? (
+          equipments.length > 0 ? (
+            equipments?.map((equipment) => (
+              <EquipmentDetails
+                key={equipment._id}
+                equipment={equipment}
+              ></EquipmentDetails>
+            ))
+          ) : (
+            <div>You are not advertising any equipment yet</div>
+          )
+        ) : (
+          <div>Loading equipments...</div>
+        )}
       </div>
       <EquipmentForm></EquipmentForm>
     </div>
