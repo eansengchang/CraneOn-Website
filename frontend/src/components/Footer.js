@@ -8,7 +8,7 @@ const Footer = () => {
         <a
           href="https://www.flaticon.com/free-icons/calendar"
           title="calendar icons"
-          style={{ 'font-size': '10px', 'text-decoration': 'none' }}
+          style={{ 'fontSize': '10px', 'textDecoration': 'none' }}
         >
           Icons created by Freepik - Flaticon
         </a>

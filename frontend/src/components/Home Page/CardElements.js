@@ -59,7 +59,7 @@ export const TextWrapper = styled.div`
   height: 100%;
   padding: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   text-align: center;
   flex-direction: column;

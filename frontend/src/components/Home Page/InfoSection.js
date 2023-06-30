@@ -17,7 +17,7 @@ import {
 export const InfoSection = () => {
   return (
     <div className="container">
-      <h2>About us</h2>
+      <h1>About Us</h1>
       <p>
         We provide a rental hub for construction site equipment. Our motto is
         efficiency. Our website is a space for the equipment providers to be
@@ -25,7 +25,7 @@ export const InfoSection = () => {
         specific place. By being able to compare prices and distance of nearby
         equipment, transfers can be made more rapidly and delays avoided.
       </p>
-      <h2>What we offer:</h2>
+      <h1>What We Offer</h1>
       <CardsWrapper>
         <CardGrid>
           <CardContainer>
@@ -37,7 +37,7 @@ export const InfoSection = () => {
 
             <TextWrapper>
               <h3>Service Locator and Job Finder</h3>
-              <p>We offer the ability to find the closest equipment from your location using a map of all the advertised equipments. There is no need for tedious searching online.</p>
+              <p>We offer the ability to find the closest equipment from your location using a map of all the advertised equipments.</p>
             </TextWrapper>
           </CardContainer>
           <CardContainer>

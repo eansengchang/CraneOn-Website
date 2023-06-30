@@ -121,7 +121,7 @@ const BookingPage = () => {
         <div className="booking-info-container">
           {currentBooking ? (
             <>
-              <h2 style={{ 'text-align': 'center' }}>
+              <h2 style={{ 'textAlign': 'center' }}>
                 {"Booking for " + currentBooking.equipment.name + ":"}
               </h2>
               <p>
@@ -141,7 +141,7 @@ const BookingPage = () => {
               </span>
             </>
           ) : (
-            <h2 style={{ 'text-align': 'center' }}>
+            <h2 style={{ 'textAlign': 'center' }}>
               Please select a booking to view it
             </h2>
           )}
