@@ -153,7 +153,7 @@ const BookingForm = () => {
                 <button>Add Booking</button>
               </>
             ) : (
-              <h4>Please select an equipment to book it on the calendar.</h4>
+              <h4>Please select an equipment on the map to book it.</h4>
             )}
             {error && <div className="error">{error}</div>}
           </form>
