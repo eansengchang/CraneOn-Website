@@ -46,7 +46,7 @@ const BookingPage = () => {
     if (!user) {
       return;
     }
-    const response = await fetch('/api/bookings/' + currentBooking._id, {
+    const response = await fetch('https://craneon-test.eansengchang.repl.co/api/bookings/' + currentBooking._id, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -66,7 +66,7 @@ const BookingPage = () => {
 
     //fetch all bookings
     const fetchBookings = async () => {
-      const response = await fetch('/api/bookings', {
+      const response = await fetch('https://craneon-test.eansengchang.repl.co/api/bookings', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -80,7 +80,7 @@ const BookingPage = () => {
 
     //fetch all equipments
     const fetchEquipments = async () => {
-      const response = await fetch('/api/equipments/all', {
+      const response = await fetch('https://craneon-test.eansengchang.repl.co/api/equipments/all', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

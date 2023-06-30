@@ -53,7 +53,7 @@ const BookingForm = () => {
     }
 
     const booking = { ...newBooking, user_id: user._id };
-    const response = await fetch('/api/bookings', {
+    const response = await fetch('https://craneon-test.eansengchang.repl.co/api/bookings', {
       method: 'POST',
       body: JSON.stringify(booking),
       headers: {

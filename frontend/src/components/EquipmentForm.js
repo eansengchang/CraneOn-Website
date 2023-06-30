@@ -29,7 +29,7 @@ const EquipmentForm = () => {
     }
 
     const equipment = { name, description, postcode: fix(postcode), price };
-    const response = await fetch('/api/equipments', {
+    const response = await fetch('https://craneon-test.eansengchang.repl.co/api/equipments', {
       method: 'POST',
       body: JSON.stringify(equipment),
       headers: {

@@ -12,7 +12,7 @@ const EquipmentDetails = ({ equipment }) => {
       return;
     }
 
-    const response = await fetch('/api/equipments/' + equipment._id, {
+    const response = await fetch('https://craneon-test.eansengchang.repl.co/api/equipments/' + equipment._id, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${user.token}`,

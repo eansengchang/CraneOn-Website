@@ -18,7 +18,7 @@ const EquipmentsPage = () => {
     dispatch({ type: 'SET_EQUIPMENTS', payload: null });
     //fetch all equipments
     const fetchEquipments = async () => {
-      const response = await fetch('/api/equipments', {
+      const response = await fetch('https://craneon-test.eansengchang.repl.co/api/equipments', {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

@@ -17,6 +17,15 @@ app.use((req, res, next) => {
   next();
 });
 
+const cors = require('cors');
+const corsOptions = {
+  origin: '*',
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 //routes
 app.use('/api/equipments', equipmentRoutes);
 app.use('/api/user', userRoutes);
